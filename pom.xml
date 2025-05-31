@@ -27,7 +27,7 @@
         <url>https://github.com/ASEAN-Build-The-Earth/discordsrv-bridge/issues</url>
     </issueManagement>
     <scm>
-        <url>https://github.com/ASEAN-Build-The-Earth/discordsrv-bridge</url>
+        <url>https://github.com/ASEAN-Build-The-Earth/discordsrv-bridge/tree/main</url>
         <connection>scm:git@github.com:ASEAN-Build-The-Earth/discordsrv-bridge.git</connection>
         <developerConnection>scm:git@github.com:ASEAN-Build-The-Earth/discordsrv-bridge.git</developerConnection>
     </scm>
@@ -36,6 +36,8 @@
             <name>Tintinkung</name>
             <email>tintinkung.lemonade@gmail.com</email>
             <url>https://github.com/tintinkung</url>
+            <organization>ASEAN Build The Earth</organization>
+            <organizationUrl>https://github.com/ASEAN-Build-The-Earth</organizationUrl>
         </developer>
     </developers>
 
@@ -43,13 +45,6 @@
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://central.sonatype.com</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <!-- Plugin Build Settings -->
     <build>
@@ -66,18 +61,6 @@
             </resource>
         </resources>
         <plugins>
-            <!-- Maven Central publishing -->
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.7.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>central</publishingServerId>
-                    <tokenAuth>true</tokenAuth>
-                    <autoPublish>true</autoPublish>
-                </configuration>
-            </plugin>
             <!-- Compile the project -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -116,29 +99,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Sign with GPG -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.2.7</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <!-- GPG Version >= 2.1 -->
-                <configuration>
-                    <gpgArguments>
-                        <arg>--pinentry-mode</arg>
-                        <arg>loopback</arg>
-                    </gpgArguments>
-                    <useAgent>false</useAgent>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -186,5 +146,89 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
+    <profiles>
+        <profile>
+            <id>publish-maven-central</id>
+            <distributionManagement>
+                <repository>
+                    <id>central</id>
+                    <name>Central Repository</name>
+                    <url>https://central.sonatype.com</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <!-- Maven Central publishing -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                        </configuration>
+                    </plugin>
+                    <!-- Sign with GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>verify</phase>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>publish-github-packages</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/asean-build-the-earth/discordsrv-bridge</url>
+                </repository>
+            </distributionManagement>
+            <!-- Sign with GPG -->
+            <build>
+                <plugins>
+                    <!-- Sign with GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <phase>verify</phase>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

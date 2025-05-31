@@ -1,0 +1,40 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <profiles>
+        <profile>
+            <id>publish-github-packages</id>
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/asean-build-the-earth/discordsrv-bridge</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>publish-maven-central</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <name>Central Repository</name>
+                    <url>https://central.sonatype.com</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <servers>
+        <server>
+            <id>github</id>
+            <username>asean-build-the-earth</username>
+            <password>${GITHUB_TOKEN}</password>
+        </server>
+        <server>
+            <id>central</id>
+            <username>${CENTRAL_SONATYPE_ORG_USERNAME}</username>
+            <password>${CENTRAL_SONATYPE_ORG_PASSWORD}</password>
+        </server>
+    </servers>
+</settings>
