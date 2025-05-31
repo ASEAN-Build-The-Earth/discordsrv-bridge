@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>asia.buildtheearth.asean.discord</groupId>
+    <artifactId>discordsrv-bridge</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>DiscordSRV Bridge Library</name>
+    <description>Bridge utility library for connecting to DiscordSRV JDA</description>
+    <url>https://github.com/ASEAN-Build-The-Earth/discordsrv-bridge/</url>
+    <inceptionYear>2025</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/ASEAN-Build-The-Earth/discordsrv-bridge/issues</url>
+    </issueManagement>
+    <scm>
+        <url>https://github.com/ASEAN-Build-The-Earth/discordsrv-bridge</url>
+        <connection>scm:git@github.com:ASEAN-Build-The-Earth/discordsrv-bridge.git</connection>
+        <developerConnection>scm:git@github.com:ASEAN-Build-The-Earth/discordsrv-bridge.git</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <name>Tintinkung</name>
+            <email>tintinkung.lemonade@gmail.com</email>
+            <url>https://github.com/tintinkung</url>
+        </developer>
+    </developers>
+
+    <properties>
+        <java.version>21</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://central.sonatype.com</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <!-- Plugin Build Settings -->
+    <build>
+        <!-- IMPORTANT: Plugin Building Path -->
+        <sourceDirectory>src/main/java</sourceDirectory>
+
+        <!-- IMPORTANT: Output File Name -->
+        <finalName>${project.artifactId}-${project.version}</finalName>
+
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- Maven Central publishing -->
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.7.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                    <autoPublish>true</autoPublish>
+                </configuration>
+            </plugin>
+            <!-- Compile the project -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+            <!-- Attach Sources -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Attach Javadocs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadoc</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Sign with GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.7</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <!-- GPG Version >= 2.1 -->
+                <configuration>
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                    <useAgent>false</useAgent>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <!-- Spigot API -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <!-- DiscordSRV -->
+        <repository>
+            <id>Scarsz-Nexus</id>
+            <url>https://nexus.scarsz.me/content/groups/public/</url>
+        </repository>
+        <!-- Jetbrains Annotations -->
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Spigot API -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.21.3-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- DiscordSRV -->
+        <dependency>
+            <groupId>com.discordsrv</groupId>
+            <artifactId>discordsrv</artifactId>
+            <version>1.29.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jetbrains Annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>26.0.2</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>
