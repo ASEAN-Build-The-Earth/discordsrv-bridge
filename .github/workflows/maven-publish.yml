@@ -18,7 +18,7 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
-      - name: Setup Signing
+      - name: Setup GitHub Packages
         uses: actions/setup-java@v4
         with:
           java-version: 21
@@ -26,12 +26,8 @@ jobs:
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
-      - name: Setup GitHub Packages
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: 'temurin'
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Verify GPG Key Presence
+        run: gpg --list-secret-keys --keyid-format LONG
 
       - name: Publish to GitHub Packages
         run: mvn --batch-mode -Drevision=${{ github.event.release.tag_name }} -Dsha1= -Dchangelist= clean deploy -Ppublish-github-packages
@@ -49,6 +45,9 @@ jobs:
           server-username: CENTRAL_SONATYPE_ORG_USERNAME
           server-password: CENTRAL_SONATYPE_ORG_PASSWORD
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Verify GPG Key Presence
+        run: gpg --list-secret-keys --keyid-format LONG
 
       - name: Publish to Maven Central
         run: mvn --batch-mode -Drevision=${{ github.event.release.tag_name }} -Dsha1= -Dchangelist= clean deploy -Ppublish-maven-central
