@@ -36,5 +36,9 @@
             <username>${CENTRAL_SONATYPE_ORG_USERNAME}</username>
             <password>${CENTRAL_SONATYPE_ORG_PASSWORD}</password>
         </server>
+        <server>
+            <id>gpg.passphrase</id>
+            <passphrase>${MAVEN_GPG_PASSPHRASE}</passphrase>
+        </server>
     </servers>
 </settings>
