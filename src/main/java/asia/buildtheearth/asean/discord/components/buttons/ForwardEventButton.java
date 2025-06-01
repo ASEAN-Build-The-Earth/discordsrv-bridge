@@ -1,7 +1,7 @@
 package asia.buildtheearth.asean.discord.components.buttons;
 
-import asia.buildtheearth.asean.discord.commands.interaction.Interaction;
-import asia.buildtheearth.asean.discord.commands.interaction.InteractionEvent;
+import asia.buildtheearth.asean.discord.commands.interactions.Interaction;
+import asia.buildtheearth.asean.discord.commands.interactions.InteractionEvent;
 import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.ButtonClickEvent;
 import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.build.CommandData;
 import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.ActionRow;
@@ -39,7 +39,7 @@ public class ForwardEventButton<T extends CommandData, V extends Interaction, E>
      * @param <E> the forwarded data type
      */
     @FunctionalInterface
-    protected interface Resolver<T extends CommandData, V extends Interaction, E> extends Function<T, BiConsumer<E, V>> {}
+    public interface Resolver<T extends CommandData, V extends Interaction, E> extends Function<T, BiConsumer<E, V>> {}
 
     /**
      * Functional interface to extract forward-able data from a button click event.
@@ -47,7 +47,7 @@ public class ForwardEventButton<T extends CommandData, V extends Interaction, E>
      * @param <E> the type of data to forward
      */
     @FunctionalInterface
-    protected interface Forwarder<E> extends Function<ButtonClickEvent, E> {}
+    public interface Forwarder<E> extends Function<ButtonClickEvent, E> {}
 
     /**
      * Functional interface defining how the command handles the forwarded data.
@@ -57,7 +57,7 @@ public class ForwardEventButton<T extends CommandData, V extends Interaction, E>
      * @param <E> the type of forwarded data
      */
     @FunctionalInterface
-    protected interface Handler<T, V extends Interaction, E> extends Function<T, BiConsumer<E, V>> {}
+    public interface Handler<T, V extends Interaction, E> extends Function<T, BiConsumer<E, V>> {}
 
     /**
      * The command class that this button is associated with.

@@ -1,4 +1,4 @@
-package asia.buildtheearth.asean.discord.commands.interaction;
+package asia.buildtheearth.asean.discord.commands.interactions;
 
 import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.build.CommandData;
 

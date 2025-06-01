@@ -1,6 +1,6 @@
 package asia.buildtheearth.asean.discord.components.buttons;
 
-import asia.buildtheearth.asean.discord.commands.interaction.InteractionEvent;
+import asia.buildtheearth.asean.discord.commands.interactions.InteractionEvent;
 import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.ButtonClickEvent;
 
 /**

@@ -1,6 +1,6 @@
 package asia.buildtheearth.asean.discord.commands;
 
-import asia.buildtheearth.asean.discord.commands.interaction.Interaction;
+import asia.buildtheearth.asean.discord.commands.interactions.Interaction;
 import github.scarsz.discordsrv.dependencies.jda.api.interactions.InteractionHook;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

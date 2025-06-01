@@ -2,8 +2,8 @@ package asia.buildtheearth.asean.discord.providers;
 
 import asia.buildtheearth.asean.discord.commands.SlashCommand;
 import asia.buildtheearth.asean.discord.commands.events.CommandEvent;
-import asia.buildtheearth.asean.discord.commands.interaction.Interaction;
-import asia.buildtheearth.asean.discord.commands.interaction.InteractionEvent;
+import asia.buildtheearth.asean.discord.commands.interactions.Interaction;
+import asia.buildtheearth.asean.discord.commands.interactions.InteractionEvent;
 import github.scarsz.discordsrv.api.commands.PluginSlashCommand;
 import github.scarsz.discordsrv.api.commands.SlashCommandProvider;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.ChannelType;

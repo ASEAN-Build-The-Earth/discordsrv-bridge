@@ -9,7 +9,17 @@ import java.util.regex.Pattern;
 
 /**
  * Plugin Component's ID pattern that is
- * used to parse component's {@code custom_id} payload
+ * used to parse component's {@code custom_id} payload.
+ *
+ * <p>Refer to {@link asia.buildtheearth.asean.discord.providers.ComponentProvider}
+ * for creating a component with a valid ID pattern that can be parse by this class.</p>
+ *
+ * @see #PLUGIN
+ * @see #TYPE
+ * @see #ID
+ * @see #USER
+ * @see #PAYLOAD
+ * @see #parseCustomID(String)
  */
 public enum IDPattern {
     /** The plugin name owning this component */

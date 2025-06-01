@@ -1,7 +1,7 @@
 package asia.buildtheearth.asean.discord.commands.events;
 
 import asia.buildtheearth.asean.discord.commands.SlashCommand;
-import asia.buildtheearth.asean.discord.commands.interaction.Interaction;
+import asia.buildtheearth.asean.discord.commands.interactions.Interaction;
 import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.SlashCommandEvent;
 import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package asia.buildtheearth.asean.discord.commands.interaction;
+package asia.buildtheearth.asean.discord.commands.interactions;
 
 /**
  * Super class of all slash command related interactions.
@@ -24,7 +24,7 @@ public class Interaction {
      * @param userID The owner of this interaction (snowflake)
      * @param eventID The unique ID to save this interaction (snowflake)
      */
-    Interaction(long userID, long eventID) {
+    public Interaction(long userID, long eventID) {
         this.userID = userID;
         this.eventID = eventID;
     }
