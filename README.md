@@ -19,7 +19,7 @@ Include this library
 <dependency>
     <groupId>asia.buildtheearth.asean.discord</groupId>
     <artifactId>discordsrv-bridge</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.1</version>
 </dependency> 
 ```
 
@@ -47,48 +47,39 @@ Include this library
 Use this package to manage discord slash command interactions.
 The class `SlashCommand` can be used as the base class of all slash command implementations.
 
-> <b>📦commands.events</b>
-> 
+<b>📦commands.events</b>
 > Manage slash command event (Current only provides the handle for slash command trigger event)
 
-> <b>📦commands.interactions</b>
-> 
+<b>📦commands.interactions</b>
 > Manage slash command interaction as payload class and its event.
 
 ### 📦components
 This package handle discord's message components.
 
-> <b>📦components.api</b>
-> 
+<b>📦components.api</b>
 > New Discord's message components API ([ComponentV2](https://discord.com/developers/docs/components/reference))
 
-> <b>📦components.buttons</b>
-> 
+<b>📦components.buttons</b>
 > Discord's Button components handler
 
-> <b>📁IDPattern</b>
->
+<b>📁IDPattern</b>
 > Plugin Component's ID pattern that is
   used to parse component's `custom_id` payload.
 
-> <b>📁PluginComponent</b>
->
+<b>📁PluginComponent</b>
 > A class to parse plugin registered components.
 
-> <b>📁WebhookDataBuilder</b>
->
+<b>📁WebhookDataBuilder</b>
 > A builder for creating `WebhookData` objects, which represent payloads for sending messages via Discord webhooks.
   Supports thread name, username, avatar URL, message content, embeds, and interaction components.
 
 
 ### 📦providers
 
-> <b>📁ComponentProvider</b>
-> 
+<b>📁ComponentProvider</b>
 > Plugin owned component provider class.
   Use this interface to create each component ID.
 
-> <b>📁DiscordCommandProvider</b>
-> 
+<b>📁DiscordCommandProvider</b>
 > Provider/Manager for discord slash command interactions.
   Managed externally by DiscordSRV API {@link SlashCommandProvider}.

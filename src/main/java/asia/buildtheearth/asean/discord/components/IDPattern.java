@@ -64,7 +64,7 @@ public enum IDPattern {
      * @return an {@link EnumMap} with the extracted components, or {@code null} if the {@code custom_id} doesn't match the pattern
      */
     @Nullable
-    public static EnumMap<IDPattern, String> parseCustomID(String customId) {
+    public static EnumMap<IDPattern, String> parseCustomID(@NotNull String customId) {
         Matcher matcher = COMPONENT_PATTERN.matcher(customId);
         if (!matcher.matches()) return null;
 

@@ -35,27 +35,87 @@ public class MessageListenerButton implements InteractiveButtonHandler {
     }
 
     /**
+     * Interaction data retrieved {@link #onInteracted(PluginButton, ButtonClickEvent, InteractionEvent)} of this listener.
+     *
+     * @param button       The {@link PluginButton} that was clicked.
+     * @param event        The {@link ButtonClickEvent} from JDA.
+     * @param interactions Additional interaction context or utilities.
+     * @param channel      The channel that the button is listening for message.
+     */
+    protected record InteractionData(@NotNull PluginButton button,
+                                     @NotNull ButtonClickEvent event,
+                                     @NotNull InteractionEvent interactions,
+                                     @NotNull TextChannel channel) {}
+
+    /**
      * {@inheritDoc}
      *
      * @throws IllegalArgumentException if this interaction does not occur in a text channel
      */
     @Override
     public void onInteracted(@NotNull PluginButton button, @NotNull ButtonClickEvent event, @NotNull InteractionEvent interactions) {
-        TextChannel channel = event.getInteraction().getTextChannel();
-        MessageReference lastMsg = getInteractionLastMessage(channel);
+        InteractionData interaction = new InteractionData(button, event, interactions, event.getInteraction().getTextChannel());
+
+        MessageReference lastMsg = getInteractionLastMessage(interaction.channel());
 
         // Last message is not sent (it is the button message)
         if(lastMsg.getMessageIdLong() == event.getMessage().getIdLong()) {
             // edit the button as enabled to listen for message again
-            event.editButton(button.get().asEnabled()).queue();
-            return;
+            if(this.onMessageNotSent(interaction))
+                return;
         }
 
         // Resolve the message data and forward it to sender
-        lastMsg.resolve().queue((message -> {
-            event.editComponents(ActionRow.of(button.get().asDisabled())).queue();
-            this.sender.apply(message).onInteracted(button, event, interactions);
-        }));
+        lastMsg.resolve().queue(message -> {
+            if(this.onMessageReceived(interaction, message))
+                this.sender.apply(message).onInteracted(button, event, interactions);
+        }, failed -> this.onMessageRetrievingFailed(interaction, failed));
+    }
+
+    /**
+     * Invoked if the button is clicked but no recent message is sent.
+     *
+     * <p>Override this method to define a response for this event,
+     * the default response will re-enable the button to continue listening to message.</p>
+     *
+     * @param interaction The interaction data of this listener including all info like {@link InteractiveButtonHandler}
+     * @return True cancel this interaction afterward (Default to {@code true})
+     */
+    protected boolean onMessageNotSent(@NotNull InteractionData interaction) {
+        interaction.event().editButton(interaction.button().get().asEnabled()).queue();
+        return true;
+    }
+
+    /**
+     * Invoked if the message is successfully received
+     *
+     * <p>Override this method to define a response for this event,
+     * the default response will disable the button and forward the action.</p>
+     *
+     * @param interaction The interaction data of this listener including all info like {@link InteractiveButtonHandler}
+     * @param message      The received message instance.
+     * @return True to forward the message to this listener's sender (Default to {@code true})
+     */
+    protected boolean onMessageReceived(@NotNull InteractionData interaction,
+                                        @NotNull Message message) {
+        interaction.event().editComponents(ActionRow.of(interaction.button().get().asDisabled())).queue();
+        return true;
+    }
+
+    /**
+     * Invoked if the message cannot be resolved.
+     *
+     * <p>Override this method to define a response for this event,
+     * the default response will disable the button.</p>
+     *
+     * @param interaction The interaction data of this listener including all info like {@link InteractiveButtonHandler}
+     * @param error        The {@link Throwable} error that cause the retrieval to fails.
+     *
+     * @see MessageReference#resolve()
+     */
+    protected void onMessageRetrievingFailed(@NotNull InteractionData interaction,
+                                             @NotNull Throwable error) {
+        interaction.event().editComponents(ActionRow.of(interaction.button().get().asDisabled())).queue();
     }
 
     /**

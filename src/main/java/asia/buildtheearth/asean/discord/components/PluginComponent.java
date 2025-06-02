@@ -46,6 +46,7 @@ public class PluginComponent<T extends Component> {
     @Contract("_, null -> fail")
     public PluginComponent(@NotNull Plugin plugin, @Nullable T component) throws IllegalArgumentException {
         if(component == null) throw new IllegalArgumentException("Component cannot be null");
+        if(component.getId() == null) throw new IllegalArgumentException("Component has no ID to parse");
 
         this.component = component;
         this.rawID = component.getId();
