@@ -19,7 +19,7 @@ Include this library
 <dependency>
     <groupId>asia.buildtheearth.asean.discord</groupId>
     <artifactId>discordsrv-bridge</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency> 
 ```
 
@@ -38,48 +38,68 @@ Include this library
  │  ├─ 📦api
  │  └─ 📦buttons
  │
- └─ 📦providers
+ ├─ 📦providers
+ └─ 📁DiscordSRVBridge
 ```
+
+<p>dependency: <code>com.discordsrv:discordsrv</code> <b>v1.29.0</b></p>
 </sub>
 </td></tr></tbody></table>
 
-### 📦commands
+## 📁DiscordSRVBridge
+Bridge interface for integrating with the **DiscordSRV** plugin.
+
+Provides default methods that delegate to corresponding
+methods in the DiscordSRV API.
+
+---
+## 📦commands
 Use this package to manage discord slash command interactions.
 The class `SlashCommand` can be used as the base class of all slash command implementations.
 
 <b>📦commands.events</b>
-> Manage slash command event (Current only provides the handle for slash command trigger event)
+
+Manage slash command event (Current only provides the handle for slash command trigger event)
 
 <b>📦commands.interactions</b>
-> Manage slash command interaction as payload class and its event.
 
-### 📦components
+Manage slash command interaction as payload class and its event.
+
+---
+## 📦components
 This package handle discord's message components.
 
 <b>📦components.api</b>
-> New Discord's message components API ([ComponentV2](https://discord.com/developers/docs/components/reference))
+
+New Discord's message components API ([ComponentV2](https://discord.com/developers/docs/components/reference))
 
 <b>📦components.buttons</b>
-> Discord's Button components handler
+
+Discord's Button components handler
 
 <b>📁IDPattern</b>
-> Plugin Component's ID pattern that is
+
+Plugin Component's ID pattern that is
   used to parse component's `custom_id` payload.
 
 <b>📁PluginComponent</b>
-> A class to parse plugin registered components.
+
+A class to parse plugin registered components.
 
 <b>📁WebhookDataBuilder</b>
-> A builder for creating `WebhookData` objects, which represent payloads for sending messages via Discord webhooks.
+
+A builder for creating `WebhookData` objects, which represent payloads for sending messages via Discord webhooks.
   Supports thread name, username, avatar URL, message content, embeds, and interaction components.
 
-
-### 📦providers
+---
+## 📦providers
 
 <b>📁ComponentProvider</b>
-> Plugin owned component provider class.
-  Use this interface to create each component ID.
+
+Plugin owned component provider class.
+Use this interface to create each component ID.
 
 <b>📁DiscordCommandProvider</b>
-> Provider/Manager for discord slash command interactions.
-  Managed externally by DiscordSRV API {@link SlashCommandProvider}.
+
+Provider/Manager for discord slash command interactions.
+Managed externally by DiscordSRV API `SlashCommandProvider`.
