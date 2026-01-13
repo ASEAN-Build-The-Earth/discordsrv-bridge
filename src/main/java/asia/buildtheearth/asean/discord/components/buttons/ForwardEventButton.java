@@ -2,10 +2,9 @@ package asia.buildtheearth.asean.discord.components.buttons;
 
 import asia.buildtheearth.asean.discord.commands.interactions.Interaction;
 import asia.buildtheearth.asean.discord.commands.interactions.InteractionEvent;
-import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.ButtonClickEvent;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.build.CommandData;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.ActionRow;
-
+import com.discordsrv.dependencies.net.dv8tion.jda.api.components.actionrow.ActionRow;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +46,7 @@ public class ForwardEventButton<T extends CommandData, V extends Interaction, E>
      * @param <E> the type of data to forward
      */
     @FunctionalInterface
-    public interface Forwarder<E> extends Function<ButtonClickEvent, E> {}
+    public interface Forwarder<E> extends Function<ButtonInteractionEvent, E> {}
 
     /**
      * Functional interface defining how the command handles the forwarded data.
@@ -128,7 +127,7 @@ public class ForwardEventButton<T extends CommandData, V extends Interaction, E>
      */
     @Override
     public void onInteracted(@NotNull PluginButton button,
-                             @NotNull ButtonClickEvent event,
+                             @NotNull ButtonInteractionEvent event,
                              @NotNull InteractionEvent interactions) {
         if(this.response != null) this.response.onInteracted(button, event);
 

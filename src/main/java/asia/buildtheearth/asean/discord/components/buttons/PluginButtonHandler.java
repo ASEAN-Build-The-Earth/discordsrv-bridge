@@ -1,7 +1,7 @@
 package asia.buildtheearth.asean.discord.components.buttons;
 
 import asia.buildtheearth.asean.discord.commands.interactions.InteractionEvent;
-import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.ButtonClickEvent;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 
 /**
  * Base marker interface for all button interaction handlers.
@@ -9,9 +9,9 @@ import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.ButtonCl
  * <p>This interface is extended by has the respective {@code onInteracted} method for {@link SimpleButtonHandler} and
  * {@link InteractiveButtonHandler} to define specific interaction handling logic.</p>
  *
- * @see #onInteracted(PluginButton, ButtonClickEvent)
- * @see #onInteracted(PluginButton, ButtonClickEvent, InteractionEvent)
- * @see #onInteractedBadOwner(ButtonClickEvent)
+ * @see #onInteracted(PluginButton, ButtonInteractionEvent)
+ * @see #onInteracted(PluginButton, ButtonInteractionEvent, InteractionEvent)
+ * @see #onInteractedBadOwner(ButtonInteractionEvent)
  */
 public interface PluginButtonHandler{
 
@@ -20,11 +20,11 @@ public interface PluginButtonHandler{
      * Override this method to provide specific behavior.
      *
      * @param button       The {@link PluginButton} that was clicked.
-     * @param event        The {@link ButtonClickEvent} from JDA.
+     * @param event        The {@link ButtonInteractionEvent} from JDA.
      * @param interactions Additional interaction context or utilities.
      * @throws IllegalArgumentException if not overridden
      */
-    default void onInteracted(PluginButton button, ButtonClickEvent event, InteractionEvent interactions) {
+    default void onInteracted(PluginButton button, ButtonInteractionEvent event, InteractionEvent interactions) {
         throw new IllegalArgumentException("Plugin button requires an implementation of interaction handling.");
     }
 
@@ -33,10 +33,10 @@ public interface PluginButtonHandler{
      * Override this method to provide specific behavior.
      *
      * @param button       The {@link PluginButton} that was clicked.
-     * @param event        The {@link ButtonClickEvent} from JDA.
+     * @param event        The {@link ButtonInteractionEvent} from JDA.
      * @throws IllegalArgumentException if not overridden
      */
-    default void onInteracted(PluginButton button, ButtonClickEvent event) {
+    default void onInteracted(PluginButton button, ButtonInteractionEvent event) {
         throw new IllegalArgumentException("Plugin button requires an implementation of interaction handling.");
     }
 
@@ -46,5 +46,5 @@ public interface PluginButtonHandler{
      *
      * @param event The event triggered by the unauthorized user.
      */
-    default void onInteractedBadOwner(ButtonClickEvent event) {}
+    default void onInteractedBadOwner(ButtonInteractionEvent event) {}
 }

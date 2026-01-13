@@ -32,7 +32,7 @@ public interface AvailableButtonHandler {
      *
      * @return The handler implementation,
      *         Null if the component is not a button
-     *         (ex. a {@link github.scarsz.discordsrv.dependencies.jda.api.interactions.components.selections.SelectionMenu SelectionMenu})
+     *         (ex. a {@link com.discordsrv.dependencies.net.dv8tion.jda.api.interactions.components.selections.SelectMenuInteraction SelectionMenu})
      */
     @org.jetbrains.annotations.Nullable
     PluginButtonHandler getHandler();

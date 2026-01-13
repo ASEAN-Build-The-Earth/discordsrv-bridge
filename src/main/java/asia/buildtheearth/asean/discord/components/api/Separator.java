@@ -2,7 +2,10 @@ package asia.buildtheearth.asean.discord.components.api;
 
 /**
  * Vertical padding and visual division between other components.
+ *
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.separator.Separator}
  */
+@Deprecated(since = "2.0.0")
 public class Separator extends ComponentV2 {
     /**
      * Create a new separator.

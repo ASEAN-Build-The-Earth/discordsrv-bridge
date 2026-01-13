@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * @see #newComponentID(String, Long, Long) 
  * @see #newComponentID(String, Long, Long, Object) 
  */
-public interface ComponentProvider {
+public interface ComponentProvider extends PluginProvider {
 
     /**
      * The plugin of this component,
@@ -19,7 +19,8 @@ public interface ComponentProvider {
      *
      * @return The plugin instance.
      */
-    org.bukkit.plugin.Plugin getPlugin();
+    @Override
+    MinecraftPlugin getPlugin();
 
     /**
      * Resolve this component ID returning a new component ID string

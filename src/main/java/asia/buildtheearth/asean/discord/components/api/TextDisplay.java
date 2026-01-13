@@ -3,7 +3,10 @@ package asia.buildtheearth.asean.discord.components.api;
 /**
  * Component that allows you to add text to your message
  * formatted with markdown and mention users and roles.
+ *
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.textdisplay.TextDisplay}
  */
+@Deprecated(since = "2.0.0")
 public class TextDisplay extends ComponentV2 {
 
     /**

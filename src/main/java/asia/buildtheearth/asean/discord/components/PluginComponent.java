@@ -1,11 +1,12 @@
 package asia.buildtheearth.asean.discord.components;
 
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.Component;
-import github.scarsz.discordsrv.dependencies.jda.internal.utils.Checks;
+import asia.buildtheearth.asean.discord.providers.MinecraftPlugin;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.components.Component;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.components.attribute.ICustomId;
+import com.discordsrv.dependencies.net.dv8tion.jda.internal.utils.Checks;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -17,7 +18,7 @@ import java.util.function.BiFunction;
  *
  * @param <T> The component type of this referring plugin-component
  */
-public class PluginComponent<T extends Component> {
+public class PluginComponent<T extends ICustomId & Component> {
 
     /**
      * The parsed component ID as {@link IDPattern}
@@ -44,12 +45,12 @@ public class PluginComponent<T extends Component> {
      * @throws IllegalArgumentException If the component failed to be validated as plugin registered.
      */
     @Contract("_, null -> fail")
-    public PluginComponent(@NotNull Plugin plugin, @Nullable T component) throws IllegalArgumentException {
+    public PluginComponent(@NotNull MinecraftPlugin plugin, @Nullable T component) throws IllegalArgumentException {
         if(component == null) throw new IllegalArgumentException("Component cannot be null");
-        if(component.getId() == null) throw new IllegalArgumentException("Component has no ID to parse");
+        if(component.getCustomId() == null) throw new IllegalArgumentException("Component has no ID to parse");
 
         this.component = component;
-        this.rawID = component.getId();
+        this.rawID = component.getCustomId();
         this.dataID = IDPattern.parseCustomID(this.rawID);
 
         // Invalid button ID (possibly from other bots)
@@ -78,9 +79,9 @@ public class PluginComponent<T extends Component> {
      *
      * <p>Usage:</p>
      * <blockquote> {@snippet :
-     * import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.Button;
+     * import com.discordsrv.dependencies.net.dv8tion.jda.api.components.buttons.Button;
      *
-     * class Plugin extends org.bukkit.plugin.java.JavaPlugin {
+     * class Plugin extends MinecraftPlugin {
      *    private Button component = Button.success("plugin", "button");
      *    private PluginComponent<Button> button = PluginComponent.getOpt(this, component, PluginComponent::new);
      * }
@@ -94,8 +95,8 @@ public class PluginComponent<T extends Component> {
      * @param <T> The component type to be parsed.
      * @param <V> The {@link PluginComponent} instance which will be constructed.
      */
-    public static <T extends Component, V extends PluginComponent<T>>
-    Optional<V> getOpt(@NotNull Plugin plugin, T component, @NotNull BiFunction<Plugin, T, V> constructor) {
+    public static <T extends ICustomId & Component, V extends PluginComponent<T>>
+    Optional<V> getOpt(@NotNull MinecraftPlugin plugin, T component, @NotNull BiFunction<MinecraftPlugin, T, V> constructor) {
         try {
             return Optional.of(constructor.apply(plugin, component));
         } catch (IllegalArgumentException ex) {
@@ -112,8 +113,8 @@ public class PluginComponent<T extends Component> {
      *         handled the initial exception as an {@link Optional#empty() empty}.
      * @param <T> The component type to be parsed.
      */
-    public static <T extends Component>
-    Optional<PluginComponent<T>> getOpt(@NotNull Plugin plugin, @Nullable T component) {
+    public static <T extends ICustomId & Component>
+    Optional<PluginComponent<T>> getOpt(@NotNull MinecraftPlugin plugin, @Nullable T component) {
         return getOpt(plugin, component, PluginComponent::new);
     }
 

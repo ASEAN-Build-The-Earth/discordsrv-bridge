@@ -1,11 +1,12 @@
 package asia.buildtheearth.asean.discord.components.buttons;
 
 import asia.buildtheearth.asean.discord.commands.interactions.InteractionEvent;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.Message;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageReference;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
-import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.ButtonClickEvent;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.ActionRow;
+
+import com.discordsrv.dependencies.net.dv8tion.jda.api.components.actionrow.ActionRow;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.entities.Message;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.entities.MessageReference;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -35,15 +36,15 @@ public class MessageListenerButton implements InteractiveButtonHandler {
     }
 
     /**
-     * Interaction data retrieved {@link #onInteracted(PluginButton, ButtonClickEvent, InteractionEvent)} of this listener.
+     * Interaction data retrieved {@link #onInteracted(PluginButton, ButtonInteractionEvent, InteractionEvent)} of this listener.
      *
      * @param button       The {@link PluginButton} that was clicked.
-     * @param event        The {@link ButtonClickEvent} from JDA.
+     * @param event        The {@link ButtonInteractionEvent} from JDA.
      * @param interactions Additional interaction context or utilities.
      * @param channel      The channel that the button is listening for message.
      */
     protected record InteractionData(@NotNull PluginButton button,
-                                     @NotNull ButtonClickEvent event,
+                                     @NotNull ButtonInteractionEvent event,
                                      @NotNull InteractionEvent interactions,
                                      @NotNull TextChannel channel) {}
 
@@ -53,8 +54,8 @@ public class MessageListenerButton implements InteractiveButtonHandler {
      * @throws IllegalArgumentException if this interaction does not occur in a text channel
      */
     @Override
-    public void onInteracted(@NotNull PluginButton button, @NotNull ButtonClickEvent event, @NotNull InteractionEvent interactions) {
-        InteractionData interaction = new InteractionData(button, event, interactions, event.getInteraction().getTextChannel());
+    public void onInteracted(@NotNull PluginButton button, @NotNull ButtonInteractionEvent event, @NotNull InteractionEvent interactions) {
+        InteractionData interaction = new InteractionData(button, event, interactions, (TextChannel) event.getInteraction().getChannel());
 
         MessageReference lastMsg = getInteractionLastMessage(interaction.channel());
 
@@ -132,6 +133,7 @@ public class MessageListenerButton implements InteractiveButtonHandler {
             long guildID = channel.getGuild().getIdLong();
 
             return new MessageReference(
+                MessageReference.MessageReferenceType.DEFAULT.getId(),
                 lastMsgID,
                 channelID,
                 guildID,

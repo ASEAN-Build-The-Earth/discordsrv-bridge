@@ -1,6 +1,6 @@
 package asia.buildtheearth.asean.discord.components.api;
 
-import github.scarsz.discordsrv.dependencies.jda.api.utils.data.DataObject;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -8,12 +8,6 @@ import java.util.Map;
 
 /**
  * Base class for all {@code ComponentV2} implementations.
- * <p>
- * Note: Due to DiscordSRV's current implementation of JDA,
- * interactive components are not fully supported. For example,
- * adding an interactive button will result in a {@code null} event upon usage.
- * Additionally, features such as menu selections have not been implemented yet.
- * </p>
  *
  * @see Container
  * @see MediaGallery
@@ -24,7 +18,9 @@ import java.util.Map;
  * @see TextThumbnailSection
  * @see Thumbnail
  * @see File
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.Component}
  */
+@Deprecated(since = "2.0.0")
 public abstract class ComponentV2 extends DataObject {
 
     /**

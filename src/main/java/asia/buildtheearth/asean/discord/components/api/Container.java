@@ -1,7 +1,7 @@
 package asia.buildtheearth.asean.discord.components.api;
 
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.ActionRow;
-import github.scarsz.discordsrv.dependencies.jda.api.utils.data.DataArray;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.components.actionrow.ActionRow;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.DataArray;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
@@ -10,7 +10,10 @@ import java.util.ArrayList;
 /**
  * <a href="https://discord.com/developers/docs/components/reference#container">Container Component</a>,
  * display an embed-like wrapper to its contents.
+ *
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.container.Container}
  */
+@Deprecated(since = "2.0.0")
 public class Container extends ComponentV2 {
 
     /**
@@ -33,7 +36,6 @@ public class Container extends ComponentV2 {
                 "components", new ArrayList<>(),
                 "spoiler", spoiler
         );
-
         this.components = this.getArray("components");
     }
     /**
@@ -81,7 +83,7 @@ public class Container extends ComponentV2 {
      * @return This container for chaining
      */
     public Container addActionRow(@NotNull ActionRow component) {
-        components.add(component.toData());
+        components.add(component);
         return this;
     }
 

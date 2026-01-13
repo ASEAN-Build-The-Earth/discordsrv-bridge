@@ -1,6 +1,6 @@
 package asia.buildtheearth.asean.discord.commands.interactions;
 
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.build.CommandData;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 /**
  * Interaction handler for all active slash-command interactions.

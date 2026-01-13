@@ -1,7 +1,8 @@
 package asia.buildtheearth.asean.discord.components.buttons;
 
 import asia.buildtheearth.asean.discord.components.PluginComponent;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.Button;
+import asia.buildtheearth.asean.discord.providers.MinecraftPlugin;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.components.buttons.Button;
 
 /**
  * Represents a Discord button component tied to a plugin context.
@@ -17,7 +18,7 @@ public class PluginButton extends PluginComponent<Button> {
      * @param component The JDA {@link Button} to be parsed to a plugin component.
      * @throws IllegalArgumentException If the component could not be created or is invalid.
      */
-    public PluginButton(org.bukkit.plugin.Plugin plugin, Button component) throws IllegalArgumentException {
+    public PluginButton(MinecraftPlugin plugin, Button component) throws IllegalArgumentException {
         super(plugin, component);
     }
 }

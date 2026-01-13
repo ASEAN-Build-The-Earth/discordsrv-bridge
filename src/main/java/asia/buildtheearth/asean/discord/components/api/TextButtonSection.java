@@ -1,13 +1,16 @@
 package asia.buildtheearth.asean.discord.components.api;
 
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.DataObject;
 import org.jetbrains.annotations.NotNull;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.Button;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.components.buttons.Button;
 
 /**
  * A component that display {@link TextDisplay} contextually with a {@link Button}
  * 
- * @see #addTextDisplay(TextDisplay) 
+ * @see #addTextDisplay(TextDisplay)
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.section.SectionContentComponent}
  */
+@Deprecated(since = "2.0.0")
 public class TextButtonSection extends Section {
 
     /**
@@ -17,7 +20,7 @@ public class TextButtonSection extends Section {
      * @param button The button object of this section
      */
     public TextButtonSection(int componentID, @NotNull Button button) {
-        super(componentID, button.toData().toMap());
+        super(componentID, (DataObject) button);
     }
 
 

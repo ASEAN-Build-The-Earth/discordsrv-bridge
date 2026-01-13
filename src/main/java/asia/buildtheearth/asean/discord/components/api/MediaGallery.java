@@ -1,6 +1,6 @@
 package asia.buildtheearth.asean.discord.components.api;
 
-import github.scarsz.discordsrv.dependencies.jda.api.utils.data.DataArray;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.DataArray;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,7 +8,10 @@ import java.util.Map;
 /**
  * Display media attachments in an organized gallery format.
  * Each item can have optional descriptions and can be marked as spoilers.
+ *
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.mediagallery.MediaGallery}
  */
+@Deprecated(since = "2.0.0")
 public class MediaGallery extends ComponentV2 {
     /**
      * Array of media gallery item

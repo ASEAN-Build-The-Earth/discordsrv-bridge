@@ -4,14 +4,11 @@ import asia.buildtheearth.asean.discord.commands.SlashCommand;
 import asia.buildtheearth.asean.discord.commands.events.CommandEvent;
 import asia.buildtheearth.asean.discord.commands.interactions.Interaction;
 import asia.buildtheearth.asean.discord.commands.interactions.InteractionEvent;
-import github.scarsz.discordsrv.api.commands.PluginSlashCommand;
-import github.scarsz.discordsrv.api.commands.SlashCommandProvider;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.ChannelType;
-import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.SlashCommandEvent;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.CommandInteraction;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.build.CommandData;
-import github.scarsz.discordsrv.dependencies.jda.api.requests.restaction.interactions.ReplyAction;
-import github.scarsz.discordsrv.util.SchedulerUtil;
+import com.discordsrv.api.discord.entity.interaction.command.DiscordCommand;
+import com.discordsrv.api.events.discord.interaction.command.DiscordChatInputInteractionEvent;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.entities.channel.ChannelType;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,21 +21,20 @@ import java.util.function.Supplier;
 
 /**
  * Provider/Manager for discord slash command interactions.
- * Managed externally by DiscordSRV API {@link SlashCommandProvider}.
  *
  * @see #register(String, CommandData...) Register slash commands
  * @see #fromClass(Class) Get the registered slash command
  * @see #putPayload(Long, Interaction) Track a slash command event w/ payload
  * @see #getAs(Class, Long) Get the tracked slash command interaction
  */
-public abstract class DiscordCommandProvider implements SlashCommandProvider, InteractionEvent, CommandEvent {
+public abstract class DiscordCommandProvider implements PluginProvider, InteractionEvent, CommandEvent {
 
     /**
      * Internal slash command object management.
-     * Stores all available {@link PluginSlashCommand}
+     * Stores all available {@link DiscordCommand}
      * which is the wrapper of all slash command instances.
      */
-    private final Set<PluginSlashCommand> commandSet;
+    private final Set<DiscordCommand> commandSet;
 
     /**
      * Internal commandData instance, map available class into
@@ -66,7 +62,7 @@ public abstract class DiscordCommandProvider implements SlashCommandProvider, In
      *
      * @return The plugin instance that will be used to register any commands
      */
-    public abstract @NotNull org.bukkit.plugin.Plugin getPlugin();
+    public abstract @NotNull MinecraftPlugin getPlugin();
 
     /**
      * Register a new guild-based slash command
@@ -76,7 +72,7 @@ public abstract class DiscordCommandProvider implements SlashCommandProvider, In
      */
     public final void register(@NotNull String guildID, CommandData @NotNull ... commands) {
         for(CommandData command : commands) {
-            PluginSlashCommand slashCommand = new PluginSlashCommand(this.getPlugin(), command, guildID);
+            DiscordCommand slashCommand = (DiscordCommand) command;
             commandSet.add(slashCommand);
             registered.put(command.getClass(), command);
         }
@@ -110,9 +106,9 @@ public abstract class DiscordCommandProvider implements SlashCommandProvider, In
      * @param event The command that is triggered
      * @return Whether the triggered channel is valid
      */
-    private boolean isUnknownChannel(@NotNull CommandInteraction event) {
-        if(event.getChannelType() == ChannelType.UNKNOWN)
-            return ifUnknownChannel(event.deferReply(true));
+    private boolean isUnknownChannel(@NotNull DiscordChatInputInteractionEvent event) {
+        if(event.asJDA().getChannelType() == ChannelType.UNKNOWN)
+            return ifUnknownChannel(event.asJDA().deferReply(true));
         else return false;
     }
 
@@ -124,27 +120,27 @@ public abstract class DiscordCommandProvider implements SlashCommandProvider, In
      * @return True to cancel this slash command event,
      *         false to trigger the command anyway
      */
-    protected abstract boolean ifUnknownChannel(@NotNull ReplyAction action);
+    protected abstract boolean ifUnknownChannel(ReplyCallbackAction action);
 
     /**
      * {@inheritDoc}
      */
     @Override
     public final <T extends Interaction, V extends CommandData>
-    void onSlashCommand(@NotNull SlashCommandEvent event,
+    void onSlashCommand(@NotNull DiscordChatInputInteractionEvent event,
                         boolean ephemeral,
                         @NotNull Class<V> type,
                         @NotNull Function<V, SlashCommand<T>> resolver,
                         @NotNull Supplier<@Nullable T> payload) {
 
         if(isUnknownChannel(event)) return;
-        else event.deferReply(ephemeral).queue();
+        else event.deferReply(ephemeral);
 
         T interaction = payload.get();
 
-        if(interaction != null) this.putPayload(event.getIdLong(), interaction);
+        if(interaction != null) this.putPayload(event.asJDA().getIdLong(), interaction);
 
-        resolver.apply(this.fromClass(type)).trigger(event.getHook(), interaction);
+        resolver.apply(this.fromClass(type)).trigger(event.asJDA().getHook(), interaction);
     }
 
     /**
@@ -152,7 +148,7 @@ public abstract class DiscordCommandProvider implements SlashCommandProvider, In
      */
     @Override
     public final <T extends Interaction, V extends CommandData>
-    void onSlashCommand(@NotNull SlashCommandEvent event,
+    void onSlashCommand(@NotNull DiscordChatInputInteractionEvent event,
                         boolean ephemeral,
                         @NotNull Class<V> type,
                         @NotNull Function<V, SlashCommand<T>> resolver) {
@@ -177,8 +173,7 @@ public abstract class DiscordCommandProvider implements SlashCommandProvider, In
      *
      * @return Set of registered provider
      */
-    @Override
-    public final Set<PluginSlashCommand> getSlashCommands() {
+    public final Set<DiscordCommand> getSlashCommands() {
         return commandSet;
     }
 
@@ -210,14 +205,8 @@ public abstract class DiscordCommandProvider implements SlashCommandProvider, In
      * {@inheritDoc}
      */
     @Override
-    public final <T extends Interaction> void putPayload(Long eventID, T payload) {
+    public <T extends Interaction> void putPayload(Long eventID, T payload) {
         interactions.put(eventID, payload);
-
-        // Payload is guaranteed to be expired in 15 minutes (15min * 60000ms / 50tick = 18000)
-        SchedulerUtil.runTaskLaterAsynchronously(this.getPlugin(), () -> {
-            if(interactions.remove(eventID) != null)
-                onInteractionTimeout(payload.getClass());
-        }, 18000);
     }
 
     /**

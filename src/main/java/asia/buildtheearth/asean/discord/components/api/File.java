@@ -7,7 +7,10 @@ import java.util.Map;
 /**
  * Display an uploaded file as an attachment to the message
  * and reference it in the component.
+ *
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.filedisplay.FileDisplay}
  */
+@Deprecated(since = "2.0.0")
 public class File extends ComponentV2 {
 
     /**

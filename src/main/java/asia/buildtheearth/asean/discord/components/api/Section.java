@@ -1,13 +1,17 @@
 package asia.buildtheearth.asean.discord.components.api;
 
-import github.scarsz.discordsrv.dependencies.jda.api.utils.data.DataArray;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.DataArray;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.DataObject;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * A component that display {@link TextDisplay} contextually with an accessory.
+ *
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.section.Section}
  */
+@Deprecated(since = "2.0.0")
 class Section extends ComponentV2 {
 
     /**
@@ -21,7 +25,7 @@ class Section extends ComponentV2 {
      * @param componentID Identifier for component
      * @param accessory The raw accessory data to create this section with
      */
-    public Section(int componentID, Map<String, Object> accessory) {
+    public Section(int componentID, DataObject accessory) {
         super(
             9,
             componentID,

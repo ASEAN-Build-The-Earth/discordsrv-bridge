@@ -2,8 +2,8 @@ package asia.buildtheearth.asean.discord.commands.events;
 
 import asia.buildtheearth.asean.discord.commands.SlashCommand;
 import asia.buildtheearth.asean.discord.commands.interactions.Interaction;
-import github.scarsz.discordsrv.dependencies.jda.api.events.interaction.SlashCommandEvent;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.commands.build.CommandData;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import com.discordsrv.api.events.discord.interaction.command.DiscordChatInputInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,9 +19,9 @@ public interface CommandEvent {
      * Handles a Discord slash command interaction by deferring the reply, resolving the appropriate command handler,
      * and invoking it with a payload supplier.
      *
-     * @see #onSlashCommand(SlashCommandEvent, boolean, Class, Function) For triggering slash command without payload
+     * @see #onSlashCommand(DiscordChatInputInteractionEvent, boolean, Class, Function) For triggering slash command without payload
      *
-     * @param event     The {@link SlashCommandEvent} received from JDA.
+     * @param event     The {@link DiscordChatInputInteractionEvent} received from JDA.
      * @param ephemeral Whether the reply should be ephemeral (visible only to the user).
      * @param type      The {@link CommandData} class representing the type of command to resolve.
      * @param resolver  A function that maps the given {@link CommandData} instance to its corresponding
@@ -32,7 +32,7 @@ public interface CommandEvent {
      * @param <V>       The type of {@link CommandData} used to resolve the command handler.
      */
     <T extends Interaction, V extends CommandData>
-    void onSlashCommand(@NotNull SlashCommandEvent event,
+    void onSlashCommand(@NotNull DiscordChatInputInteractionEvent event,
                         boolean ephemeral,
                         @NotNull Class<V> type,
                         @NotNull Function<V, SlashCommand<T>> resolver,
@@ -41,7 +41,7 @@ public interface CommandEvent {
     /**
      * Handles a Discord slash command interaction without a payload.
      *
-     * @param event     The {@link SlashCommandEvent} received from JDA.
+     * @param event     The {@link DiscordChatInputInteractionEvent} received from JDA.
      * @param ephemeral Whether the reply should be ephemeral (visible only to the user).
      * @param type      The {@link CommandData} class representing the type of command to resolve.
      * @param resolver  A function that maps the given {@code CommandData} instance to its corresponding
@@ -50,7 +50,7 @@ public interface CommandEvent {
      * @param <V>       The type of {@link CommandData} used to resolve the command handler.
      */
     <T extends Interaction, V extends CommandData>
-    void onSlashCommand(@NotNull SlashCommandEvent event,
+    void onSlashCommand(@NotNull DiscordChatInputInteractionEvent event,
                         boolean ephemeral,
                         @NotNull Class<V> type,
                         @NotNull Function<V, SlashCommand<T>> resolver);

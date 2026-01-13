@@ -6,7 +6,9 @@ import org.jetbrains.annotations.NotNull;
  * A component that display {@link TextDisplay} contextually with a {@link Thumbnail}
  *
  * @see #addTextDisplay(TextDisplay)
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.section.SectionAccessoryComponent}
  */
+@Deprecated(since = "2.0.0")
 public class TextThumbnailSection extends Section {
 
     /**
@@ -16,7 +18,7 @@ public class TextThumbnailSection extends Section {
      * @param thumbnail The thumbnail data of this section
      */
     public TextThumbnailSection(int componentID, @NotNull Thumbnail thumbnail) {
-        super(componentID, thumbnail.toMap());
+        super(componentID, thumbnail);
     }
 
     /**

@@ -1,22 +1,18 @@
 package asia.buildtheearth.asean.discord.components;
 
 import asia.buildtheearth.asean.discord.components.api.ComponentV2;
-import github.scarsz.discordsrv.dependencies.commons.lang3.StringUtils;
-import github.scarsz.discordsrv.dependencies.jda.api.entities.MessageEmbed;
-import github.scarsz.discordsrv.dependencies.jda.api.interactions.components.ActionRow;
-import github.scarsz.discordsrv.dependencies.jda.api.utils.data.DataArray;
-import github.scarsz.discordsrv.dependencies.jda.api.utils.data.DataObject;
-import github.scarsz.discordsrv.dependencies.jda.api.utils.data.SerializableData;
-import github.scarsz.discordsrv.dependencies.jda.internal.utils.AllowedMentionsImpl;
-
-import github.scarsz.discordsrv.dependencies.jda.internal.utils.BufferedRequestBody;
-import github.scarsz.discordsrv.dependencies.okhttp3.MediaType;
-import github.scarsz.discordsrv.dependencies.okhttp3.MultipartBody;
-import github.scarsz.discordsrv.dependencies.okhttp3.RequestBody;
-import github.scarsz.discordsrv.dependencies.okio.Okio;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.components.actionrow.ActionRow;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.entities.MessageEmbed;
+import com.discordsrv.dependencies.net.dv8tion.jda.internal.utils.requestbody.BufferedRequestBody;
+import com.discordsrv.dependencies.okhttp3.MediaType;
+import com.discordsrv.dependencies.okhttp3.MultipartBody;
+import com.discordsrv.dependencies.okhttp3.RequestBody;
+import com.discordsrv.dependencies.okio.Okio;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.DataArray;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.DataObject;
+import com.discordsrv.dependencies.net.dv8tion.jda.api.utils.data.SerializableData;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
@@ -25,21 +21,15 @@ import java.util.*;
  * A builder for creating {@link WebhookData} objects, which represent payloads for sending messages via Discord webhooks.
  * <p>
  * Supports thread name, username, avatar URL, message content, embeds, and interaction components.
- * Also extends {@link AllowedMentionsImpl}, for allowed mentions settings.
  * </p>
- *
- * <p>usage:</p>
- * <blockquote>{@snippet :
- * WebhookData data = new WebhookDataBuilder()
- *     .setContent("Hello, Discord!")
- *     .suppressNotifications(true) // Suppresses notifications
- *     .build();
- * }</blockquote>
  *
  * <p><b>Note:</b> File attachments <i>cannot</i> be set through this builder. To include files,
  * use {@link WebhookData#addFile(File)} on the built {@link WebhookData} instance before preparing the request body.</p>
+ *
+ * @deprecated JDA ^6.0.0 added by DiscordSRV-Ascension Supports all of these components already.
  */
-public class WebhookDataBuilder extends AllowedMentionsImpl {
+@Deprecated(since = "2.0.0")
+public class WebhookDataBuilder {
 
     private @Nullable String threadName = null;
     private @Nullable String username = null;
@@ -205,7 +195,7 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
         }
 
         // Content message
-        if (StringUtils.isNotBlank(content)) {
+        if (content != null && !content.isEmpty()) {
             webhookData.put("content", content);
         }
 
@@ -231,7 +221,7 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
             }
             else if(components != null) {
                 for (ActionRow actionRow : components)
-                    componentsArray.add(actionRow.toData());
+                    componentsArray.add(actionRow);
             }
 
             webhookData.put("components", componentsArray);
@@ -243,12 +233,7 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
         }
 
         // Allow Mentions
-        if(!suppressMentions) {
-            AllowedMentionsImpl allowedMentionsImpl = this;
-            DataObject allowedMentions = allowedMentionsImpl.toData();
-            webhookData.put("allowed_mentions", allowedMentions);
-        }
-        else {
+        if(suppressMentions) {
             // Suppress all mentions
             // "allowed_mentions": {
             //     "parse": []
@@ -264,13 +249,6 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
     /**
      * Represents the data used to send a message via a Discord webhook.
      *
-     * <p>Usage:</p><blockquote>{@snippet :
-     *     // Creating Data
-     *     WebhookData data = new WebhookDataBuilder().build();
-     *     data.addFile(new File("path/to/image.png"));
-     *     // Requesting Data
-     *     MultipartBody body = data.prepareRequestBody();
-     * }</blockquote>
      * <p>Requesting API:</p>
      * <pre>{@code
      *     RestAction restAction = new RestActionImpl<>(jda, route, body, (res, req) -> {});
@@ -279,6 +257,7 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
      * @see #addFile(File)
      * @see #prepareRequestBody()
      */
+    @Deprecated(since = "2.0.0")
     public static class WebhookData extends DataObject implements SerializableData {
 
         private @Nullable List<File> attachments = null;

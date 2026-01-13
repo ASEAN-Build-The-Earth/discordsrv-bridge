@@ -8,7 +8,9 @@ import java.util.Map;
  * Content component that is a small image only usable as an accessory in a {@link Section}.
  *
  * @see TextThumbnailSection
+ * @deprecated Use {@link com.discordsrv.dependencies.net.dv8tion.jda.api.components.thumbnail.Thumbnail}
  */
+@Deprecated(since = "2.0.0")
 public class Thumbnail extends ComponentV2 {
 
     /**
