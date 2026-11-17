@@ -19,7 +19,7 @@ Include this library
 <dependency>
     <groupId>asia.buildtheearth.asean.discord</groupId>
     <artifactId>discordsrv-bridge</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency> 
 ```
 
