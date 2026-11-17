@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -280,25 +281,61 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
      * @see #prepareRequestBody()
      */
     public static class WebhookData extends DataObject implements SerializableData {
-
-        private @Nullable List<File> attachments = null;
+        /**
+         * Maps attachment data's filename, to each respective file source.
+         * (which are usable like <code>attachment://filename</code>)
+         */
+        private @Nullable Map<String, AttachmentSource> attachments = null;
 
         private WebhookData(@NotNull Map<String, Object> data) {
             super(data);
         }
 
         /**
-         * Add file attachments for the webhook data.
+         * Add a file attachment for the webhook data.
+         *
+         * <p>usage: put the name <code>attachment://apiName</code>
+         * in any attachment field to display the file.</p>
+         *
+         * @param file The file source to add
+         * @param apiName Filename that will be used in API request (Default to {@linkplain File#getName})
+         * @throws IllegalArgumentException if the file is a directory or does not exist
+         */
+        public void addFile(@NotNull File file, @Nullable String apiName) {
+            if(file.isDirectory()) throw new IllegalArgumentException("Cannot add folder to WebhookData.");
+            if(!file.exists()) throw new IllegalArgumentException("File does not exist in the filesystem to be added.");
+            if(attachments == null) attachments = new HashMap<>();
+
+            AttachmentSource source = new AttachmentFile(file.toPath());
+            attachments.put(apiName != null ? apiName : file.getName(), source);
+        }
+
+        /**
+         * Add a file attachment for the webhook data.
+         *
+         * <p>usage: put the name <code>attachment://apiName</code>
+         * in any attachment field to display the file.</p>
+         *
+         * @param dataURI File data URI as a base64 encoded string
+         * @param apiName Filename that will be used in API request
+         * @param mimeType data mimetype, is parsed using {@link MediaType#parse(String)}
+         */
+        public void addFile(@NotNull String dataURI, String mimeType, @NotNull String apiName) {
+            if(attachments == null) attachments = new HashMap<>();
+            attachments.put(apiName, new AttachmentURI(dataURI, mimeType));
+        }
+
+        /**
+         * Add a file attachment for the webhook data.
+         *
+         * <p>usage: put the name <code>attachment://filename</code>
+         * in any attachment field to display the file.</p>
          *
          * @param file The file to add
          * @throws IllegalArgumentException if the file is a directory or does not exist
          */
         public void addFile(@NotNull File file) {
-            if(file.isDirectory()) throw new IllegalArgumentException("Cannot add folder to WebhookData.");
-            if(!file.exists()) throw new IllegalArgumentException("File does not exist in the filesystem to be added.");
-
-            if(attachments == null) attachments = new ArrayList<>(List.of(file));
-            else attachments.add(file);
+            this.addFile(file, null);
         }
 
         /**
@@ -343,16 +380,16 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
 
             for (int i = 0; i < attachmentIndex.size(); i++) {
                 String name = attachmentIndex.get(i);
-                File file = attachments.get(i);
+                AttachmentSource source = attachments.get(name);
                 InputStream data = null;
 
-                try { data = new FileInputStream(file); }
-                catch (FileNotFoundException ignored) {}
+                try { data = source.get(); }
+                catch (IOException | IllegalArgumentException ignored) {}
 
                 if (data == null) continue;
 
                 try {
-                    String mimeType = Files.probeContentType(file.toPath());
+                    String mimeType = source.mimeType();
 
                     requestBody.addFormDataPart(
                         "files[" + i + "]",
@@ -377,11 +414,11 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
                 DataArray attachmentArray = DataArray.empty();
 
                 int i = 0;
-                for (File file : attachments) {
-                    attachmentIndex.add(file.getName());
+                for (String apiName : attachments.keySet()) {
+                    attachmentIndex.add(apiName);
                     DataObject attachmentObject = DataObject.empty();
                     attachmentObject.put("id", i);
-                    attachmentObject.put("filename", file.getName());
+                    attachmentObject.put("filename", apiName);
                     attachmentArray.add(attachmentObject);
                     i++;
                 }
@@ -390,6 +427,48 @@ public class WebhookDataBuilder extends AllowedMentionsImpl {
                 return attachmentIndex;
             }
             return null;
+        }
+
+        /**
+         * Interface for supplying attachment source as {@linkplain InputStream}.
+         *
+         * @see #get()
+         * @see #mimeType()
+         */
+        private interface AttachmentSource {
+            InputStream get() throws IOException, IllegalArgumentException;
+            String mimeType() throws IOException, IllegalArgumentException;
+        }
+
+        /**
+         * Create an attachment source by base64 encoded data URI.
+         *
+         * @param dataURI The encoded data URI
+         * @param mimeType data mimetype, is parsed using {@link MediaType#parse(String)}
+         */
+        private record AttachmentURI(String dataURI, String mimeType) implements AttachmentSource {
+            @Override
+            public InputStream get() throws IllegalArgumentException {
+                byte[] decodedBytes = Base64.getDecoder().decode(dataURI);
+                return new ByteArrayInputStream(decodedBytes);
+            }
+        }
+
+        /**
+         * Create an attachment source by a file path.
+         *
+         * @param path Path to discoverable file.
+         */
+        private record AttachmentFile(Path path) implements AttachmentSource {
+            @Override
+            public InputStream get() throws IOException, IllegalArgumentException {
+                return Files.newInputStream(path);
+            }
+
+            @Override
+            public String mimeType() throws IOException {
+                return Files.probeContentType(path);
+            }
         }
     }
 }

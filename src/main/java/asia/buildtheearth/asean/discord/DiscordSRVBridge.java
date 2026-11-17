@@ -58,6 +58,7 @@ public interface DiscordSRVBridge {
      * Unsubscribe an event listener from DiscordSRV
      *
      * @param listener Subscribed {@link DiscordSRV} listener.
+     * @return DiscordSRV API unsubscribing result
      * @see ApiManager#unsubscribe(Object)
      */
     default boolean unsubscribeSRV(Object listener) {
