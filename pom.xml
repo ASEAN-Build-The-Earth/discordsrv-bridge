@@ -6,7 +6,7 @@
 
     <groupId>asia.buildtheearth.asean.discord</groupId>
     <artifactId>discordsrv-bridge</artifactId>
-    <version>1.1.3</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
 
     <name>DiscordSRV Bridge Library</name>
@@ -42,7 +42,7 @@
     </developers>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -65,17 +65,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.16.0</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <source>25</source>
+                    <target>25</target>
                 </configuration>
             </plugin>
             <!-- Attach Sources -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -90,7 +90,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.11.2</version>
+                <version>3.12.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadoc</id>
@@ -104,10 +104,10 @@
     </build>
 
     <repositories>
-        <!-- Spigot API -->
+        <!-- PaperMC -->
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <!-- DiscordSRV -->
         <repository>
@@ -124,11 +124,9 @@
     <dependencies>
         <!-- Spigot API -->
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <!-- It seems we need to compile against timestamped build
-                 Maven central rejects build with -SNAPSHOT dependency -->
-            <version>1.21.3-R0.1-20241203.162251-46</version>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>26.1.2.build.74-stable</version>
             <scope>provided</scope>
         </dependency>
 
@@ -136,7 +134,7 @@
         <dependency>
             <groupId>com.discordsrv</groupId>
             <artifactId>discordsrv</artifactId>
-            <version>1.29.0</version>
+            <version>1.30.5</version>
             <scope>provided</scope>
         </dependency>
 
@@ -144,7 +142,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>26.0.2</version>
+            <version>26.1.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -178,7 +176,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.7</version>
+                        <version>3.2.8</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -214,7 +212,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.7</version>
+                        <version>3.2.8</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
